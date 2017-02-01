@@ -32,7 +32,6 @@ class Player extends Component {
       songIndex: props.songIndex,
       songs: props.searchedSongs || this.props.songs
     };
-    this.setPlayingSong();
   }
 
   setPlayingSong() {
@@ -41,7 +40,7 @@ class Player extends Component {
       title: song.title,
       artwork: song.thumb,
       artist: song.artist,
-      duration: 294, // (Seconds)
+      duration: this.state.songDuration
     });
   }
 
@@ -69,16 +68,17 @@ class Player extends Component {
         currentTime: 0,
       });
     }
-    this.setPlayingSong();
   }
 
   goForward(){
-    this.setState({
-      songIndex: this.state.shuffle ? this.randomSongIndex() : this.state.songIndex + 1,
-      currentTime: 0,
-    });
-    this.refs.audio.seek(0);
-    this.setPlayingSong();
+    if(this.state.shuffle || this.state.songIndex + 1 != this.state.songs.length) {
+      this.setState({
+        songIndex: this.state.shuffle ? this.randomSongIndex() : this.state.songIndex + 1,
+        currentTime: 0,
+        playing: true
+      });
+      this.refs.audio.seek(0);
+    }
   }
 
   randomSongIndex(){
@@ -86,7 +86,7 @@ class Player extends Component {
     return Math.floor(Math.random() * (maxIndex - 0 + 1)) + 0;
   }
 
-  setTime(params){
+  setTime(params) {
     if( !this.state.sliding ){
       this.setState({ currentTime: params.currentTime });
     }
@@ -94,6 +94,7 @@ class Player extends Component {
 
   onLoad(params){
     this.setState({ songDuration: params.duration });
+    this.setPlayingSong();
   }
 
   onSlidingStart(){
@@ -112,6 +113,7 @@ class Player extends Component {
 
   onEnd(){
     this.setState({ playing: false });
+    this.setState({playing: true});
   }
 
   renderVideoPlayer() {
@@ -123,9 +125,7 @@ class Player extends Component {
               ref="audio"
               paused={!this.state.playing}
               playInBackground={true}
-              onError={ console.log }
-              onLoad={ console.log }
-              onLoadStart={ console.log }
+              onLoad={ this.onLoad.bind(this) }
               onProgress={ this.setTime.bind(this) }
               onEnd={ this.onEnd.bind(this) }
               resizeMode="cover"
@@ -157,7 +157,7 @@ class Player extends Component {
   renderProgressBar() {
     if(this.props.searchedSongs) {
       let song = this.state.songs[this.state.songIndex];
-      return <Progress.Bar progress={this.props.progreses[song.id]} width={width} />
+      return <Progress.Bar progress={this.props.progreses[song.id]} width={width} color="#fff" borderColor="transparent"/>
     }
     return null
   }
@@ -183,6 +183,7 @@ class Player extends Component {
         </View>
         <DownloadButton
           download={this.props.searchedSongs}
+          downloading={this.state.songs[this.state.songIndex].downloading}
           downloadMusic={() => this.props.onMusicDownload(this.state.songs[this.state.songIndex])}
         />
         {this.renderProgressBar()}

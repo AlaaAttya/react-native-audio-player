@@ -116,12 +116,8 @@ const styles = StyleSheet.create({
   sliderThumb: {
     width: 10,
     height: 10,
-    backgroundColor: '#f62976',
-    borderRadius: 10 / 2,
-    shadowColor: 'red',
-    shadowOffset: {width: 0, height: 0},
-    shadowRadius: 2,
-    shadowOpacity: 1,
+    backgroundColor: '#fff',
+    borderRadius: 10 / 2
   },
   songContainer: {
     width,

@@ -39,6 +39,7 @@ class SearchResults extends Component {
                     songImage={song.thumb}
                     id={song.id}
                     progreses={this.props.progreses}
+                    downloading={song.downloading}
                     downloadMusic={this.onPress.bind(this, song)}
                     search={true}
                     />

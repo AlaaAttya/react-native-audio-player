@@ -50,7 +50,7 @@ export class ShuffleButton extends Component {
 
 export class DownloadButton extends Component {
   render() {
-    if(!this.props.download) {
+    if(!this.props.download || this.props.downloading) {
       return  <FontAwesome style={ Styles.downloadButton } name="download" size={25} color="#333" />;
     }
     return  <FontAwesome onPress={ this.props.downloadMusic } style={ Styles.downloadButton } name="download" size={25} color="#fff" />;
@@ -64,12 +64,12 @@ export class SongSlider extends Component {
             <Slider
               onSlidingStart={ this.props.onSlidingStart }
               onSlidingComplete={ this.props.onSlidingComplete }
-              onValueChange={ this.props.onSlidingChange }
-              minimumTrackTintColor='#851c44'
+              onValueChange={ this.props.onValueChange }
+              minimumTrackTintColor='#fff'
               style={ Styles.slider }
               trackStyle={ Styles.sliderTrack }
               thumbStyle={ Styles.sliderThumb }
-              value={ this.props.songPercentage }/>
+              value={ this.props.value }/>
 
             <View style={ Styles.timeInfo }>
               <Text style={ Styles.time }>{ Utils.formattedTime(this.props.currentTime)  }</Text>

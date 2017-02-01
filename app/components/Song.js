@@ -19,10 +19,10 @@ export default class Search extends Component {
   swipeBtns = this.props.search?([{
       component: (
          <View style={Styles.downloadButtonContainer}>
-          <FontAwesome name="download" size={25} color="#fff" />
+              <FontAwesome name="download" size={25} color={this.props.downloading?'#333': '#fff'} />
           </View>
         ),
-        onPress: this.props.downloadMusic
+        onPress: this.props.downloading?() => null: this.props.downloadMusic
     }]): ([{
       text: 'Delete',
       backgroundColor: 'red',
@@ -33,7 +33,7 @@ export default class Search extends Component {
     if(!this.props.progreses) return null;
     var progress = this.props.progreses[this.props.id];
     if(this.props.search && (progress && progress > 0 && progress < 0.87))
-      return <Progress.Bar progress={progress} width={width - 20} />
+      return <Progress.Bar progress={progress} width={width - 20} style={{marginLeft: 10}} color="#c8c3c3" borderColor="transparent"/>
     else return null
   }
 
@@ -41,7 +41,9 @@ export default class Search extends Component {
     return (
         <Swipeout
           right={this.swipeBtns}
-          backgroundColor= 'transparent'>
+          backgroundColor= 'transparent'
+          autoClose={true}
+          >
           <TouchableOpacity style={Styles.songContainer} onPress={this.props.onPress}>
             <View style={Styles.songView}>
               <Image

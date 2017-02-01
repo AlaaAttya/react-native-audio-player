@@ -31,7 +31,12 @@ class Home extends Component {
 
   render() {
     return (
-      <ScrollableTabView style={{marginTop: 12}} locked={true}>
+      <ScrollableTabView
+          style={{marginTop: 12}}
+          locked={true}
+          tabBarUnderlineStyle={{backgroundColor: "#c8c3c3"}}
+          tabBarActiveTextColor="#c8c3c3"
+          initialPage={1}>
         <Search
           tabLabel="Search"
           downloadMusic={this.props.downloadMusic}

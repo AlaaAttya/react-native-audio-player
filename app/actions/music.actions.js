@@ -7,33 +7,34 @@ import RNFS from 'react-native-fs';
 
 export function downloadMusic(song) {
     return async (dispatch) => {
-      let songs = await AsyncStorage.getItem('songs');
-      songs = songs || JSON.stringify([]);
-      songs = JSON.parse(songs);
-      if(Utils.findSongInCollection(song.id, songs)) {
-        console.log("Song already downloaded");
-        return {};
-      }
+      song.downloading = false;
+      let songs = await Utils.getSongsFromStorage();
+      if(Utils.findSongInCollection(song.id, songs)) return {};
       let dirs = RNFetchBlob.fs.dirs;
-      RNFetchBlob
-      .config({
-        path: `${dirs.DocumentDir}/${song.id}.mp3`
-      })
-      .fetch('GET', song.path, {
-      })
-      .progress((received, total) => {
-        dispatch(setProgress(received / total, song.id));
-      })
-      .then(async (res) => {
-        const headers = res.respInfo.headers;
+      const songRes = await RNFetchBlob
+                      .config({
+                        path: `${dirs.DocumentDir}/${song.id}.mp3`
+                      })
+                      .fetch('GET', song.path, {
+                      })
+                      .progress((received, total) => {
+                        dispatch(setProgress(received / total, song.id));
+                      })
+        const headers = songRes.respInfo.headers;
         if(!Utils.isAudioObject(headers['Content-Type'])) return;
-        const songPath = res.path();
-        const songName = song.title;
-        song.path = res.path();
-        songs = JSON.stringify([...songs, song]);
+        const imgRes = await RNFetchBlob
+                        .config({
+                          path: `${dirs.DocumentDir}/${song.id}.jpg`
+                        })
+                        .fetch('GET', song.thumb, {
+                        });
+        song.downloading = false;
+        let newSong = {...song};
+        newSong.path = songRes.path();
+        newSong.thumb = imgRes.path();
+        songs = JSON.stringify([...songs, newSong]);
         await AsyncStorage.setItem('songs', songs);
         return dispatch(setSongs(JSON.parse(songs)));
-      })
     }
 }
 
@@ -46,24 +47,22 @@ export function musicDownloaded(path) {
 
 export function getSongs() {
     return async (dispatch) => {
-      let songs = await AsyncStorage.getItem('songs');
-      songs = songs || JSON.stringify([]);
-      songs = JSON.parse(songs);
+      let songs = await Utils.getSongsFromStorage();
       return dispatch(setSongs(songs));
     }
 }
 
 export function deleteSong(index, song) {
   return async (dispatch) => {
-    let songs = await AsyncStorage.getItem('songs');
-    songs = songs || JSON.stringify([]);
-    songs = JSON.parse(songs);
+    let songs = await Utils.getSongsFromStorage();
     try {
       await RNFS.unlink(song.path);
+      await RNFS.unlink(song.thumb);
       songs.splice(index, 1);
       await AsyncStorage.setItem('songs', JSON.stringify(songs));
       return dispatch(setSongs(songs));
     } catch(err) {
+        //If song not fount in path
         songs.splice(index, 1);
         await AsyncStorage.setItem('songs', JSON.stringify(songs));
         return dispatch(setSongs(songs));
