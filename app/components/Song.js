@@ -22,7 +22,7 @@ export default class Search extends Component {
               <FontAwesome name="download" size={25} color={this.props.downloading?'#333': '#fff'} />
           </View>
         ),
-        onPress: this.props.downloading?() => null: this.props.downloadMusic
+        onPress: this.props.downloading?(() => alert()): this.props.downloadMusic
     }]): ([{
       text: 'Delete',
       backgroundColor: 'red',
