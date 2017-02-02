@@ -3,7 +3,8 @@ import {
   View,
   TextInput,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
@@ -36,7 +37,7 @@ class Home extends Component {
           locked={true}
           tabBarUnderlineStyle={{backgroundColor: "#c8c3c3"}}
           tabBarActiveTextColor="#c8c3c3"
-          initialPage={1}>
+          initialPage={Platform.OS=='ios'?1: 0}>
         <Search
           tabLabel="Search"
           downloadMusic={this.props.downloadMusic}

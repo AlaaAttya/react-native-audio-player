@@ -5,8 +5,6 @@ import android.util.Log;
 
 import com.facebook.react.ReactApplication;
 import com.brentvatne.react.ReactVideoPackage;
-import com.zmxv.RNSound.RNSoundPackage;
-import com.mybigday.rnmediaplayer.RNMediaPlayerPackage;
 import com.rnfs.RNFSPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.tanguyantoine.react.MusicControl;
@@ -33,8 +31,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new ReactVideoPackage(),
-            new RNSoundPackage(),
-            new RNMediaPlayerPackage(),
             new RNFSPackage(),
             new VectorIconsPackage(),
             new MusicControl(),

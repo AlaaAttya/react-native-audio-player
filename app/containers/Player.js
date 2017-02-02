@@ -3,7 +3,8 @@ import {
   Image,
   Text,
   View,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import Button from 'react-native-button';
 import {Actions} from 'react-native-router-flux';
@@ -189,7 +190,7 @@ class Player extends Component {
         {this.renderProgressBar()}
         <Image
           style={ Styles.songImage }
-          source={{url: this.state.songs[this.state.songIndex].thumb}}/>
+          source={{uri: (Platform.OS == 'android'?"file://": "") + this.state.songs[this.state.songIndex].thumb}}/>
         <Text style={ Styles.songTitle }>
           {this.state.songs[this.state.songIndex].title}
         </Text>

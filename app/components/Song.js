@@ -4,7 +4,8 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -22,7 +23,7 @@ export default class Search extends Component {
               <FontAwesome name="download" size={25} color={this.props.downloading?'#333': '#fff'} />
           </View>
         ),
-        onPress: this.props.downloading?(() => alert()): this.props.downloadMusic
+        onPress: this.props.downloading?(() => null): this.props.downloadMusic
     }]): ([{
       text: 'Delete',
       backgroundColor: 'red',
@@ -47,7 +48,7 @@ export default class Search extends Component {
           <TouchableOpacity style={Styles.songContainer} onPress={this.props.onPress}>
             <View style={Styles.songView}>
               <Image
-                source={{uri: this.props.songImage || this.state.songImage}}
+                source={{uri: (Platform.OS == 'android'?'file://': "") + this.props.songImage || this.state.songImage}}
                 style={Styles.songTitleImage}
               />
               <View style={Styles.songTitleContainer}>
