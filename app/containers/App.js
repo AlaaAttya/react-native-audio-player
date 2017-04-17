@@ -16,8 +16,8 @@ export default class App extends Component {
      <Provider store={store}>
        <Router>
          <Scene key="root">
-         <Scene key="home" component={Home} initial hideNavBar hideTabBar/>
-          <Scene key="player" component={Player} hideNavBar hideTabBar/>
+          <Scene key="home" component={Home} hideNavBar hideTabBar/>
+          <Scene key="player" component={Player} initial hideNavBar hideTabBar/>
          </Scene>
        </Router>
      </Provider>

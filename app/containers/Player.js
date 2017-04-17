@@ -24,14 +24,38 @@ let {height, width} = Dimensions.get('window');
 class Player extends Component {
   constructor(props){
     super(props);
+    
+    let songs = [{
+        title: "Al lail",
+        thumb: "http://www.assabile.com/media/person/200x256/mishary-rashid-alafasy.png",
+        artist: "Abdullaah Alee Jaabir",
+        songDuration: "17001",
+        path: "https://download.quranicaudio.com/quran/abdullaah_alee_jaabir_studio/092.mp3"
+      },
+      {
+        title: "Al dohah",
+        thumb: "http://www.assabile.com/media/person/200x256/mishary-rashid-alafasy.png",
+        artist: "Abdullaah Alee Jaabir",
+        songDuration: "14001",
+        path: "https://download.quranicaudio.com/quran/abdullaah_alee_jaabir_studio/093.mp3"
+      },
+      {
+        title: "Al sharh",
+        thumb: "http://www.assabile.com/media/person/200x256/mishary-rashid-alafasy.png",
+        artist: "Abdullaah Alee Jaabir",
+        songDuration: "12001",
+        path: "https://download.quranicaudio.com/quran/abdullaah_alee_jaabir_studio/094.mp3"
+      }
+    ];
+
     this.state = {
       playing: true,
       muted: false,
       shuffle: false,
       sliding: false,
       currentTime: 0,
-      songIndex: props.songIndex,
-      songs: props.searchedSongs || this.props.songs
+      songIndex: 1,
+      songs: songs
     };
   }
 
@@ -41,7 +65,7 @@ class Player extends Component {
       title: song.title,
       artwork: song.thumb,
       artist: song.artist,
-      duration: this.state.songDuration
+      duration: song.songDuration
     });
   }
 
@@ -153,7 +177,7 @@ class Player extends Component {
     MusicControl.on('previousTrack', this.goBackward.bind(this));
   }
 
-  songImage = require('../img/music.jpg');
+  songImage = "";
 
   renderProgressBar() {
     if(this.props.searchedSongs) {
